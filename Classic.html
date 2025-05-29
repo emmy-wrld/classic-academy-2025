@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classic Academy 2025</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      animation: rainbowBackground 10s infinite linear;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }@keyframes rainbowBackground {
+  0% { background-color: red; }
+  20% { background-color: orange; }
+  40% { background-color: yellow; }
+  60% { background-color: green; }
+  80% { background-color: blue; }
+  100% { background-color: purple; }
+}
+
+.hidden { display: none; }
+.input-box { padding: 10px; font-size: 1.2em; width: 300px; margin: 10px; }
+.btn { padding: 10px 20px; font-size: 1em; cursor: pointer; }
+
+  </style>
+</head>
+<body><div id="splash">Welcome to Classic Academy Group</div><div id="form-section" class="hidden">
+  <input id="name" class="input-box" type="text" placeholder="Enter your name">
+  <input id="pic" class="input-box" type="file" accept="image/*">
+  <button class="btn" onclick="showGender()">Next</button>
+</div><div id="gender-section" class="hidden">
+  <p>Are you male or female?</p>
+  <button class="btn" onclick="askStudent('Male')">Male</button>
+  <button class="btn" onclick="askStudent('Female')">Female</button>
+</div><div id="student-check" class="hidden">
+  <p>Are you a Classic Academy student?</p>
+  <button class="btn" onclick="handleStudent(true)">Yes</button>
+  <button class="btn" onclick="handleStudent(false)">No</button>
+</div><div id="quiz-section" class="hidden">
+  <p id="quiz-question"></p>
+  <div id="options"></div>
+</div><div id="welcome-section" class="hidden">
+  <p id="welcome-msg"></p>
+  <img id="user-pic" src="" alt="Profile" width="100">
+</div><script>
+  const splash = document.getElementById('splash');
+  const formSection = document.getElementById('form-section');
+  const genderSection = document.getElementById('gender-section');
+  const studentCheck = document.getElementById('student-check');
+  const quizSection = document.getElementById('quiz-section');
+  const welcomeSection = document.getElementById('welcome-section');
+  const quizQuestion = document.getElementById('quiz-question');
+  const optionsDiv = document.getElementById('options');
+  const welcomeMsg = document.getElementById('welcome-msg');
+  const userPic = document.getElementById('user-pic');
+
+  let username = "";
+  let userPhoto = "";
+  let gender = "";
+
+  const questions = [
+    {
+      question: "Who is the most popular guy in Classic Academy?",
+      options: ["Chris", "Layomi", "Taufik", "Emmanuel"],
+      answer: "Layomi"
+    },
+    {
+      question: "Who is the most beautiful girl in Classic?",
+      options: ["Victoria", "Deborah", "Laura", "Princess"],
+      answer: "Princess"
+    },
+    {
+      question: "Who flirts more with girls?",
+      options: ["Layomi", "Iyanu", "Olamide", "Emmanuel"],
+      answer: "Iyanu"
+    },
+    {
+      question: "Who is the smartest guy in class?",
+      options: ["Iyanu", "Layomi", "Emmanuel", "Chris"],
+      answer: "Emmanuel"
+    },
+    {
+      question: "Who is the weirdo in class?",
+      options: ["Olamide", "Chris", "David", "Emmanuel"],
+      answer: "Emmanuel"
+    }
+  ];
+
+  setTimeout(() => {
+    splash.classList.add('hidden');
+    formSection.classList.remove('hidden');
+  }, 3000);
+
+  function showGender() {
+    username = document.getElementById('name').value;
+    const file = document.getElementById('pic').files[0];
+    if (!username || !file) {
+      alert('Please enter your name and select a picture.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      userPhoto = reader.result;
+      formSection.classList.add('hidden');
+      genderSection.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function askStudent(selectedGender) {
+    gender = selectedGender;
+    genderSection.classList.add('hidden');
+    studentCheck.classList.remove('hidden');
+  }
+
+  function handleStudent(isStudent) {
+    if (!isStudent) {
+      alert("Only Classic Academy students can proceed.");
+      studentCheck.innerHTML = "<p>Access Denied</p>";
+      return;
+    }
+    studentCheck.classList.add('hidden');
+    startQuiz();
+  }
+
+  function startQuiz() {
+    const q = questions[Math.floor(Math.random() * questions.length)];
+    quizSection.classList.remove('hidden');
+    quizQuestion.textContent = q.question;
+    optionsDiv.innerHTML = "";
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.textContent = opt;
+      btn.className = "btn";
+      btn.onclick = () => handleAnswer(opt, q.answer);
+      optionsDiv.appendChild(btn);
+    });
+  }
+
+  function handleAnswer(selected, correct) {
+    if (selected === correct) {
+      quizSection.classList.add('hidden');
+      welcomeSection.classList.remove('hidden');
+      welcomeMsg.textContent = `Welcome, ${username}!`;
+      userPic.src = userPhoto;
+      setTimeout(() => {
+        window.location.href = "https://chat.whatsapp.com/CHmygx72cIO2qX55rWzv6z";
+      }, 2000);
+    } else {
+      alert("Wrong answer. Try again.");
+      startQuiz();
+    }
+  }
+</script></body>
+</html>
